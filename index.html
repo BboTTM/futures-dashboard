@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>合约数据仪表板</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="dashboard">
+        <header class="page-header">
+          <div>
+            <h1>合约数据仪表板</h1>
+          </div>
+          <div class="header-meta">
+            <span id="dataRange">--</span>
+            <span id="sourceRows">--</span>
+          </div>
+        </header>
+
+        <section class="filter-band" aria-label="筛选条件">
+          <label>
+            <span>开始日期</span>
+            <input id="startDate" type="date" />
+          </label>
+          <label>
+            <span>结束日期</span>
+            <input id="endDate" type="date" />
+          </label>
+          <label>
+            <span>代理 ID</span>
+            <textarea id="agentId" rows="2" placeholder="多个代理 UID 可一行一个，或用逗号/空格分隔"></textarea>
+          </label>
+          <label>
+            <span>用户 ID</span>
+            <textarea id="userId" rows="2" placeholder="多个 UID 可一行一个，或用逗号/空格分隔"></textarea>
+          </label>
+          <label>
+            <span>国家</span>
+            <select id="country"></select>
+          </label>
+          <label>
+            <span>KYC</span>
+            <select id="kyc">
+              <option value="">全部</option>
+              <option value="是">已 KYC</option>
+              <option value="否">未 KYC</option>
+            </select>
+          </label>
+          <label>
+            <span>一级合伙人</span>
+            <input id="level1" type="search" placeholder="全部" />
+          </label>
+          <label>
+            <span>二级合伙人</span>
+            <input id="level2" type="search" placeholder="全部" />
+          </label>
+          <div class="filter-actions">
+            <button id="resetFilters" class="ghost-button">重置</button>
+          </div>
+        </section>
+
+        <section class="kpi-grid" id="kpiGrid" aria-label="核心指标"></section>
+
+        <section class="content-grid">
+          <div class="panel wide">
+            <div class="panel-head">
+              <div>
+                <h2>每日趋势</h2>
+                <p>交易、资金、手续费和划转变化</p>
+              </div>
+              <div class="segmented" id="trendMode">
+                <button class="active" data-mode="volume">交易量</button>
+                <button data-mode="cash">资金</button>
+                <button data-mode="fee">手续费</button>
+                <button data-mode="transfer">划转</button>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="trendChart" width="1100" height="320"></canvas>
+              <div id="trendTooltip" class="chart-tooltip" hidden></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head compact">
+              <h2>国家分布</h2>
+            </div>
+            <div id="countryList" class="country-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head compact">
+              <h2>用户排行</h2>
+              <select id="rankMetric">
+                <option value="合约交易量">交易量</option>
+                <option value="合约手续费">手续费</option>
+                <option value="充值金额">充值</option>
+                <option value="净入金">净入金</option>
+              </select>
+            </div>
+            <div id="rankList" class="rank-list"></div>
+          </div>
+
+          <div class="panel table-panel wide">
+            <div class="panel-head">
+              <div>
+                <h2>用户明细</h2>
+                <p>点击任意用户查看每日行为</p>
+              </div>
+              <div class="table-tools">
+                <span id="tableCount">--</span>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>用户 ID</th>
+                    <th>上级邀请人</th>
+                    <th>国家</th>
+                    <th>首充时间</th>
+                    <th>首交时间</th>
+                    <th>充值</th>
+                    <th>提现</th>
+                    <th>净入金</th>
+                    <th>合约划转</th>
+                    <th>合约划出</th>
+                    <th>净划转</th>
+                    <th>交易量</th>
+                    <th>手续费</th>
+                    <th>净手续费</th>
+                    <th>活跃天数</th>
+                  </tr>
+                </thead>
+                <tbody id="userTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="drawerOverlay" class="drawer-overlay" hidden></div>
+    <aside id="userDrawer" class="drawer" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow">User Detail</p>
+          <h2 id="drawerTitle">用户详情</h2>
+        </div>
+        <button id="closeDrawer" class="icon-button" title="关闭">×</button>
+      </div>
+      <div id="drawerBody" class="drawer-body"></div>
+    </aside>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
